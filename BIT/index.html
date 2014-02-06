@@ -32,7 +32,7 @@
                         <img src="pictures/author.png" width="48" height="48" alt="alt_text" />
                     </div>
                     <div id="author-account-info">
-                        <a href="http://www.topcoder.com/tc?module=MemberProfile&cr=20394568&tab=alg" target="_blank">boba5551</a><br>
+                        <a href="http://community.topcoder.com/tc?module=MemberProfile&cr=20394568" target="_blank">boba5551</a><br>
                         <em>TopCoder Member</em>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
 
         <div id="article">
             <h1><a name="introduction">Introduction</a></h1>
-            We often need some sort of data structure to make our algorithms faster. In this article we will discuss the <b>Binary Indexed Trees</b> structure. According to <a target="_blank" href="http://www.topcoder.com/tc?module=LinkTracking&amp;link=http://www.cs.ubc.ca/local/reading/proceedings/spe91-95/spe/vol24/issue3/spe884.pdf&amp;refer=binaryIndexedTrees">Peter M. Fenwick</a>, this structure was first used for data compression. Now it is often used for storing frequencies and manipulating cumulative frequency tables.</p>
+            We often need some sort of data structure to make our algorithms faster. In this article we will discuss the <b>Binary Indexed Trees</b> structure. According to <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.14.8917&rep=rep1&type=pdf">Peter M. Fenwick</a>, this structure was first used for data compression. Now it is often used for storing frequencies and manipulating cumulative frequency tables.</p>
 
             <p>Let's define the following <b>problem</b>: We have n boxes. Possible queries are:</p> 
             <ol>
@@ -68,7 +68,7 @@
             </ol>
 
             <p>
-            The naive solution has time complexity of O(1) for query 1 and O(n) for query 2. Suppose we make <b>m</b> queries. The worst case (when all queries are 2) has time complexity O(n * m). Using some data structure (i.e.  <a href="/tc?module=Static&amp;d1=tutorials&amp;d2=lowestCommonAncestor">RMQ</a>) we can solve this problem with the worst case time complexity of O(m log n). Another approach is to use Binary Indexed Tree data structure, also with the worst time complexity O(m log n) -- but Binary Indexed Trees are much easier to code, and require less memory space, than RMQ.
+            The naive solution has time complexity of O(1) for query 1 and O(n) for query 2. Suppose we make <b>m</b> queries. The worst case (when all queries are 2) has time complexity O(n * m). Using some data structure (i.e.  <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=lowestCommonAncestor">RMQ</a>) we can solve this problem with the worst case time complexity of O(m log n). Another approach is to use Binary Indexed Tree data structure, also with the worst time complexity O(m log n) -- but Binary Indexed Trees are much easier to code, and require less memory space, than RMQ.
             </p>
 
             <h1><a name="notation">Notation</a></h1>
@@ -94,8 +94,7 @@
             </p>
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0" border="1">
-                  <tbody>
+                <table>
                     <tr>
                       <th/>
                       <th>1</th>
@@ -172,14 +171,12 @@
                       <td align="center">0</td>
                       <td>29</td>
                     </tr>
-                  </tbody>
                 </table>
                 <p><i>Table 1.1.</i></p>
             </div>
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0"  border="1">
-                  <tbody>
+                <table>
                     <tr>
                       <th/>
                       <th>1</th>
@@ -218,7 +215,6 @@
                       <td>15</td>
                       <td>1..16</td>
                     </tr>
-                  </tbody>
                 </table>
                 <p><i>Table 1.2 - table of responsibility.</i></p>
             </div>
@@ -254,10 +250,10 @@
             <p>Now, we can easily isolate the last digit, using <u>bitwise</u> operator <b>AND</b> (in C++, Java it is <b>&amp;</b>) with <b>num</b> and <b>-num</b>:</p>
 
             <pre> 
-        a1b
-&      a¯1b
---------------------
-= (0...0)1(0...0)  
+                    a1b
+            &      a¯1b
+            --------------------
+            = (0...0)1(0...0)  
             </pre>
 
 
@@ -282,8 +278,7 @@ int read(int idx)
 
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0" align="center" border="1">
-                  <tbody>
+                <table>
                     <tr>
                       <th>iteration</th>
                       <th>idx</th>
@@ -321,7 +316,6 @@ int read(int idx)
                       <td align="center">---</td>
                       <td align="center">---</td>
                     </tr>
-                  </tbody>
                 </table>
 
                 <img src="pictures/image_1.5.png" alt="arrows show path from index to zero which we use to get sum" />
@@ -353,8 +347,7 @@ void update(int idx , int val)
             <p>Let's show example for <b>idx</b> = 5:</p>
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0" align="center" border="1">
-                  <tbody>
+                <table>
                     <tr>
                       <th>iteration</th>
                       <th>idx</th>
@@ -393,7 +386,6 @@ void update(int idx , int val)
                       <td align="center">---</td>
                       <td align="center">---</td>
                     </tr>
-                  </tbody>
                 </table>
 
                 <img src="pictures/image_1.6.png" alt="image_1.6" />
@@ -440,8 +432,7 @@ int readSingle(int idx)
             <p>Here's an example for getting the actual frequency for index 12:<br><br> First, we will calculate <b>z = 12 - (12 &amp; -12) = 8</b>, <b>sum = 11</b></p>
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0" border="1">
-                  <tbody>
+                <table>
                     <tr>
                       <th>iteration</th>
                       <th>y</th>
@@ -472,7 +463,6 @@ int readSingle(int idx)
                       <td align="center">---</td>
                       <td align="center">---</td>
                     </tr>
-                  </tbody>
                 </table>
 
                 <img src="pictures/image_1.7.png" alt="image_1.7" />
@@ -483,7 +473,7 @@ int readSingle(int idx)
 
             <ul>
                 <li><strong>Time complexity:</strong> c * O(log MaxVal), where c is less than 1.</li>
-                <li>Code<strong>Time length:</strong> Up to fifteen lines.</li>
+                <li><strong>Code length:</strong> Up to fifteen lines.</li>
             </ul>
 
             <h1><a name="scaling">Scaling the entire tree by a constant factor</a></h1>
@@ -516,7 +506,7 @@ void scale(int c)
 
 
             <h1><a name="find">Find index with given cumulative frequency</a></h1>
-            <p>The naive and most simple solution for finding an index with a given cumultive frequency is just simply iterating through all indexes, calculating cumulative frequency, and checking if it's equal to the given value. In case of negative frequencies it is the only solution. However, if we have only non-negative frequencies in our tree (that means cumulative frequencies for greater indexes are not smaller) we can figure out logarithmic algorithm, which is modification of <a href="/tc?module=Static&amp;d1=tutorials&amp;d2=binarySearch">binary search</a>. We go through all bits (starting with the highest one), make the index, compare the cumulative frequency of the current index and given value and, according to the outcome, take the lower or higher half of the interval (just like in binary search). Function in C++:</p>
+            <p>The naive and most simple solution for finding an index with a given cumultive frequency is just simply iterating through all indexes, calculating cumulative frequency, and checking if it's equal to the given value. In case of negative frequencies it is the only solution. However, if we have only non-negative frequencies in our tree (that means cumulative frequencies for greater indexes are not smaller) we can figure out logarithmic algorithm, which is modification of <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=binarySearch">binary search</a>. We go through all bits (starting with the highest one), make the index, compare the cumulative frequency of the current index and given value and, according to the outcome, take the lower or higher half of the interval (just like in binary search). Function in C++:</p>
 
             <pre class="brush: cpp">
 // if in tree exists more than one index with a same
@@ -585,8 +575,7 @@ int findG(int cumFre)
             <p>Example for cumulative frequency 21 and function <b>find</b>:</p>
 
             <div class="figure">
-                <table cellpadding="3" cellspacing="0" align="center" border="1" width="70%">
-                  <tbody>
+                <table>
                     <tr>
                       <th>First iteration</th>
                       <td align="left">tIdx is 16; tree[16] is greater than 21; half bitMask and continue</td>
@@ -610,7 +599,6 @@ int findG(int cumFre)
                       <th>Fifth iteration</th>
                       <td align="left">tIdx is 11; tree[11] is equal to 2; return index (tIdx)</td>
                     </tr>
-                  </tbody>
                 </table>
             </div>
 
@@ -678,14 +666,14 @@ void update(int x , int y , int val)
 
             <div class="figure">
                 <img src="pictures/image_1.8.png" alt="image_1.8" />
-                <p>Image 1.8 - BIT is array of arrays, so this is two-dimensional BIT (size 16 x 8).
-                Blue fields are fields which we should update when we are updating index (5 , 3).</p>
+                <p>Image 1.8 - BIT is array of arrays, so this is two-dimensional BIT (size 16 x 8).  Blue fields are fields which we should update when we are updating index (5 , 3).</p>
             </div>
 
+            <p>The modification for other functions is very similar. Also, note that BIT can be used as an n-dimensional data structure.</p>
 
             <h1><a name="prob">Sample problem</a></h1>
             <ul>
-                <li><a href="/stat?c=problem_statement&amp;pm=6551&amp;rd=9990">SRM 310 - FloatingMedian</a></li>
+                <li><a href="http://www.topcoder.com/stat?c=problem_statement&amp;pm=6551&amp;rd=9990">SRM 310 - FloatingMedian</a></li>
     
                 <li>Problem 2:</li>
                     <b>Statement:</b><br>
@@ -719,7 +707,7 @@ void update(int x , int y , int val)
             <ul>
                 <li>[1] <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=lowestCommonAncestor">RMQ</a><br></li>
                 <li>[2] <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=binarySearch">Binary Search</a><br></li>
-                <li>[3] <a target="_blank" href="http://www.topcoder.com/tc?module=LinkTracking&amp;link=http://www.cs.ubc.ca/local/reading/proceedings/spe91-95/spe/vol24/issue3/spe884.pdf&amp;refer=binaryIndexedTrees">Peter M. Fenwick</a></li>
+                <li>[3] <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.14.8917&rep=rep1&type=pdf">Peter M. Fenwick</a></li>
             </ul>
 
     </content>
