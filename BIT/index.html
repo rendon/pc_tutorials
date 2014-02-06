@@ -3,7 +3,18 @@
 <head>
     <title>Tutorial Title</title>
     <meta charset="utf-8" />
+
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shBrushCpp.js" ></script>
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shCore.css" />
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shCoreDefault.css" />
+
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shThemeDefault.css" />
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+
 </head>
 <body>
     <header>
@@ -255,7 +266,7 @@
                 If we want to read cumulative frequency for some integer <b>idx</b>, we add to <b>sum tree[idx]</b>, substract last bit of <b>idx</b> from itself (also we can write - remove the last digit; change the last digit to zero) and repeat this while <b>idx</b> is greater than zero. We can use next function (written in C++).
             </p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 int read(int idx)
 {
     int sum = 0;
@@ -329,7 +340,7 @@ int read(int idx)
                 The concept is to update tree frequency at all indexes which are responsible for frequency whose value we are changing. In reading cumulative frequency at some index, we were removing the last bit and going on. In changing some frequency <b>val</b> in tree, we should increment value at the current index (the starting index is always the one whose frequency is changed) for <b>val</b>, add the last digit to index and go on while the index is less than or equal to <b>MaxVal</b>. Function in C++:
             </p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void update(int idx , int val)
 {
     while (idx <= MaxVal) {
@@ -406,7 +417,7 @@ void update(int idx , int val)
 
             <p>Repeat the same process with <b>y</b>. Using our function for reading <b>sum</b> we will remove the last digits from the number (one by one). After several steps, our <b>y</b> will become (just to remind, it was <b>a0b</b>) <b>a0b¯</b>, which is the same as <b>z</b>. Now, we can write our algorithm. Note that the only exception is when <b>x</b> is equal to 0. Function in C++:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 int readSingle(int idx)
 {
     int sum = tree[idx]; // sum will be decreased
@@ -478,7 +489,7 @@ int readSingle(int idx)
             <h1><a name="scaling">Scaling the entire tree by a constant factor</a></h1>
             <p>Sometimes we want to scale our tree by some factor. With the procedures described above it is very simple.  If we want to scale by some factor <b>c</b>, then each index <b>idx</b> should be updated by <b>-(c - 1) * readSingle(idx) / c</b> (because <b>f[idx] - (c - 1) * f[idx] / c = f[idx] / c</b>). Simple function in C++:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void scale(int c)
 {
     for (int i = 1 ; i <= MaxVal ; i++) {
@@ -489,7 +500,7 @@ void scale(int c)
 
             <p>This can also be done more quickly. Factor is linear operation. Each tree frequency is a linear composition of some frequencies.  If we scale each frequency for some factor,  we also scaled tree frequency for the same factor. Instead of rewriting the procedure above, which has time complexity O(MaxVal * log MaxVal), we can achieve time complexity of O(MaxVal):</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void scale(int c)
 {
     for (int i = 1 ; i <= MaxVal ; i++) {
@@ -507,7 +518,7 @@ void scale(int c)
             <h1><a name="find">Find index with given cumulative frequency</a></h1>
             <p>The naive and most simple solution for finding an index with a given cumultive frequency is just simply iterating through all indexes, calculating cumulative frequency, and checking if it's equal to the given value. In case of negative frequencies it is the only solution. However, if we have only non-negative frequencies in our tree (that means cumulative frequencies for greater indexes are not smaller) we can figure out logarithmic algorithm, which is modification of <a href="/tc?module=Static&amp;d1=tutorials&amp;d2=binarySearch">binary search</a>. We go through all bits (starting with the highest one), make the index, compare the cumulative frequency of the current index and given value and, according to the outcome, take the lower or higher half of the interval (just like in binary search). Function in C++:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 // if in tree exists more than one index with a same
 // cumulative frequency, this procedure will return
 // some of them (we do not know which one)
@@ -619,7 +630,7 @@ int findG(int cumFre)
 
             <p>If <b>m</b> is the number of queries, <b>max_x</b> is maximum x coordinate, and <b>max_y</b> is maximum y coordinate, then the problem should be solved in O(m * log (max_x) * log (max_y)). In this case, each element of the tree will contain array - (<b>tree[max_x][max_y]</b>). Updating indexes of x-coordinate is the same as before. For example, suppose we are setting/removing dot (<b>a</b> , <b>b</b>). We will call <b>update(a , b , 1)/update(a , b , -1)</b>, where <b>update</b> is:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void update(int x , int y , int val)
 {
     while (x <= max_x) {
@@ -633,7 +644,7 @@ void update(int x , int y , int val)
 
             <p>The function <b>updatey</b> is the "same" as function <b>update</b>:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void updatey(int x , int y , int val)
 {
     while (y <= max_y) {
@@ -646,7 +657,7 @@ void updatey(int x , int y , int val)
 
             <p>It can be written in one function/procedure:</p>
 
-            <pre lang="cpp">
+            <pre class="brush: cpp">
 void update(int x , int y , int val)
 {
     int y1;
@@ -713,7 +724,6 @@ void update(int x , int y , int val)
 
     </content>
     <footer>
-        
     </footer>
 </body>
 </html>
