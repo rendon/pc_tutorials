@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tutorial Title</title>
+    <title>Binary Indexed Trees</title>
     <meta charset="utf-8" />
 
     <link rel="stylesheet" href="../style.css">
@@ -59,26 +59,26 @@
 
         <div id="article">
             <h1><a name="introduction">Introduction</a></h1>
-            We often need some sort of data structure to make our algorithms faster. In this article we will discuss the <b>Binary Indexed Trees</b> structure. According to <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.14.8917&rep=rep1&type=pdf">Peter M. Fenwick</a>, this structure was first used for data compression. Now it is often used for storing frequencies and manipulating cumulative frequency tables.</p>
+            We often need some sort of data structure to make our algorithms faster. In this article we will discuss the <strong>Binary Indexed Trees</strong> structure. According to <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.14.8917&rep=rep1&type=pdf">Peter M. Fenwick</a>, this structure was first used for data compression. Now it is often used for storing frequencies and manipulating cumulative frequency tables.</p>
 
-            <p>Let's define the following <b>problem</b>: We have n boxes. Possible queries are:</p> 
+            <p>Let's define the following <strong>problem</strong>: We have n boxes. Possible queries are:</p> 
             <ol>
-                <li>Add marble to box <b>i</b> </li>
-                <li>Sum marbles from box <b>k</b> to box <b>l</b></li>
+                <li>Add marble to box <strong>i</strong> </li>
+                <li>Sum marbles from box <strong>k</strong> to box <strong>l</strong></li>
             </ol>
 
             <p>
-            The naive solution has time complexity of O(1) for query 1 and O(n) for query 2. Suppose we make <b>m</b> queries. The worst case (when all queries are 2) has time complexity O(n * m). Using some data structure (i.e.  <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=lowestCommonAncestor">RMQ</a>) we can solve this problem with the worst case time complexity of O(m log n). Another approach is to use Binary Indexed Tree data structure, also with the worst time complexity O(m log n) -- but Binary Indexed Trees are much easier to code, and require less memory space, than RMQ.
+            The naive solution has time complexity of O(1) for query 1 and O(n) for query 2. Suppose we make <strong>m</strong> queries. The worst case (when all queries are 2) has time complexity O(n * m). Using some data structure (i.e.  <a href="http://www.topcoder.com/tc?module=Static&amp;d1=tutorials&amp;d2=lowestCommonAncestor">RMQ</a>) we can solve this problem with the worst case time complexity of O(m log n). Another approach is to use Binary Indexed Tree data structure, also with the worst time complexity O(m log n) -- but Binary Indexed Trees are much easier to code, and require less memory space, than RMQ.
             </p>
 
             <h1><a name="notation">Notation</a></h1>
             <ul>
-                <li><strong>BIT</strong>   <b>B</b>inary <b>I</b>ndexed <b>T</b>ree</li>
+                <li><strong>BIT</strong>   <strong>B</strong>inary <strong>I</strong>ndexed <strong>T</strong>ree</li>
                 <li><strong>MaxVal</strong>  Maximum value which will have non-zero frequency</li>
-                <li><strong>f[i]</strong>  Frequency of value with index <b>i</b>, <b>i</b> = 1 .. MaxVal </li>
-                <li><strong>c[i]</strong>  Cumulative frequency for index <b>i</b> (f[1] + f[2] + ... + f[i])</li>
-                <li><strong>tree[i]</strong>  Sum of frequencies stored in <b>BIT</b> with index <b>i</b> (latter will be described what index means); sometimes we will write <i>tree frequency</i> instead <i>sum of frequencies stored in BIT</i><br>
-                <li><strong>num¯</strong> Complement of integer <b>num</b> (integer where each binary digit is inverted: 0 -&gt; 1; 1 -&gt; 0 )</li>
+                <li><strong>f[i]</strong>  Frequency of value with index <strong>i</strong>, <strong>i</strong> = 1 .. MaxVal </li>
+                <li><strong>c[i]</strong>  Cumulative frequency for index <strong>i</strong> (f[1] + f[2] + ... + f[i])</li>
+                <li><strong>tree[i]</strong>  Sum of frequencies stored in <strong>BIT</strong> with index <strong>i</strong> (latter will be described what index means); sometimes we will write <i>tree frequency</i> instead <i>sum of frequencies stored in BIT</i><br>
+                <li><strong>num¯</strong> Complement of integer <strong>num</strong> (integer where each binary digit is inverted: 0 -&gt; 1; 1 -&gt; 0 )</li>
             </ul>
 
             <p><strong>NOTE</strong>: Often we put f[0] = 0, c[0] = 0, tree[0] = 0, so sometimes I will just ignore index 0.</p>
@@ -90,7 +90,7 @@
             </p>
 
             <p>
-                <b>idx</b> is some index of <b>BIT</b>. <b>r</b> is a position in <b>idx</b> of the last digit 1 (from left to right) in binary notation. <b>tree[idx]</b> is sum of frequencies from index (<b>idx</b> - 2^<b>r</b> + 1) to index <b>idx</b> (look at the Table 1.1 for clarification). We also write that <b>idx</b> is <b>responsible</b> for indexes from (<b>idx</b> - 2^<b>r</b> + 1) to <b>idx</b> (note that responsibility is the key in our algorithm and is the way of manipulating the tree).
+                <strong>idx</strong> is some index of <strong>BIT</strong>. <strong>r</strong> is a position in <strong>idx</strong> of the last digit 1 (from left to right) in binary notation. <strong>tree[idx]</strong> is sum of frequencies from index (<strong>idx</strong> - 2^<strong>r</strong> + 1) to index <strong>idx</strong> (look at the Table 1.1 for clarification). We also write that <strong>idx</strong> is <strong>responsible</strong> for indexes from (<strong>idx</strong> - 2^<strong>r</strong> + 1) to <strong>idx</strong> (note that responsibility is the key in our algorithm and is the way of manipulating the tree).
             </p>
 
             <div class="figure">
@@ -231,23 +231,23 @@
             </div>
 
             <p>
-                Suppose we are looking for cumulative frequency of index 13 (for the first 13 elements). In binary notation, 13 is equal to 1101. Accordingly, we will calculate <b>c[1101] = tree[1101] + tree[1100] + tree[1000]</b> (more about this later).
+                Suppose we are looking for cumulative frequency of index 13 (for the first 13 elements). In binary notation, 13 is equal to 1101. Accordingly, we will calculate <strong>c[1101] = tree[1101] + tree[1100] + tree[1000]</strong> (more about this later).
             </p>
 
             <h1><a name="lastdigit">Isolating the last digit</a></h1>
-            <p><b>NOTE:</b> Instead of "the last non-zero digit," it will write only "the last digit."</p>
+            <p><strong>NOTE:</strong> Instead of "the last non-zero digit," it will write only "the last digit."</p>
 
             <p>
-                There are times when we need to get just the last digit from a binary number, so we need an efficient way to do that. Let <b>num</b> be the integer whose last digit we want to isolate. In binary notation <b>num</b> can be represented as <b>a1b</b>, where <b>a</b> represents binary digits before the last digit and <b>b</b> represents zeroes after the last digit.
+                There are times when we need to get just the last digit from a binary number, so we need an efficient way to do that. Let <strong>num</strong> be the integer whose last digit we want to isolate. In binary notation <strong>num</strong> can be represented as <strong>a1b</strong>, where <strong>a</strong> represents binary digits before the last digit and <strong>b</strong> represents zeroes after the last digit.
             </p>
 
             <p>
-                Integer <b>-num</b> is equal to <b>(a1b)¯ + 1 = a¯0b¯ + 1</b>. <b>b</b> consists of all zeroes, so <b>b¯</b> consists of all ones. Finally we have<br>
+                Integer <strong>-num</strong> is equal to <strong>(a1b)¯ + 1 = a¯0b¯ + 1</strong>. <strong>b</strong> consists of all zeroes, so <strong>b¯</strong> consists of all ones. Finally we have<br>
             </p>
 
-            <p><center><b>-num = (a1b)¯ + 1 = a¯0b¯ + 1 = a¯0(0...0)¯ + 1 = a¯0(1...1) + 1 = a¯1(0...0) = a¯1b</b>.</center></p>
+            <p><center><strong>-num = (a1b)¯ + 1 = a¯0b¯ + 1 = a¯0(0...0)¯ + 1 = a¯0(1...1) + 1 = a¯1(0...0) = a¯1b</strong>.</center></p>
 
-            <p>Now, we can easily isolate the last digit, using <u>bitwise</u> operator <b>AND</b> (in C++, Java it is <b>&amp;</b>) with <b>num</b> and <b>-num</b>:</p>
+            <p>Now, we can easily isolate the last digit, using <u>bitwise</u> operator <strong>AND</strong> (in C++, Java it is <strong>&amp;</strong>) with <strong>num</strong> and <strong>-num</strong>:</p>
 
             <pre> 
                     a1b
@@ -259,7 +259,7 @@
 
             <h1><a name="read">Read cumulative frequency</a></h1>
             <p>
-                If we want to read cumulative frequency for some integer <b>idx</b>, we add to <b>sum tree[idx]</b>, substract last bit of <b>idx</b> from itself (also we can write - remove the last digit; change the last digit to zero) and repeat this while <b>idx</b> is greater than zero. We can use next function (written in C++).
+                If we want to read cumulative frequency for some integer <strong>idx</strong>, we add to <strong>sum tree[idx]</strong>, substract last bit of <strong>idx</strong> from itself (also we can write - remove the last digit; change the last digit to zero) and repeat this while <strong>idx</strong> is greater than zero. We can use next function (written in C++).
             </p>
 
             <pre class="brush: cpp">
@@ -274,7 +274,7 @@ int read(int idx)
 }
             </pre>
 
-            <p>Example for <b>idx</b> = 13; <b>sum</b> = 0:</p>
+            <p>Example for <strong>idx</strong> = 13; <strong>sum</strong> = 0:</p>
 
 
             <div class="figure">
@@ -322,7 +322,7 @@ int read(int idx)
                 <p>Image 1.5 - arrows show path from index to zero which we use to get sum (image shows example for index 13).</p>
             </div>
 
-            <p>So, our result is 26. The number of iterations in this function is number if bits in <b>idx</b>, which is at most <b>log MaxVal</b>.</p>
+            <p>So, our result is 26. The number of iterations in this function is number if bits in <strong>idx</strong>, which is at most <strong>log MaxVal</strong>.</p>
 
             <ul>
                 <li><strong>Time complexity:</strong> O(log MaxVal).</li>
@@ -331,7 +331,7 @@ int read(int idx)
 
             <h1><a name="add">Change frequency at some position and update tree</a></h1>
             <p>
-                The concept is to update tree frequency at all indexes which are responsible for frequency whose value we are changing. In reading cumulative frequency at some index, we were removing the last bit and going on. In changing some frequency <b>val</b> in tree, we should increment value at the current index (the starting index is always the one whose frequency is changed) for <b>val</b>, add the last digit to index and go on while the index is less than or equal to <b>MaxVal</b>. Function in C++:
+                The concept is to update tree frequency at all indexes which are responsible for frequency whose value we are changing. In reading cumulative frequency at some index, we were removing the last bit and going on. In changing some frequency <strong>val</strong> in tree, we should increment value at the current index (the starting index is always the one whose frequency is changed) for <strong>val</strong>, add the last digit to index and go on while the index is less than or equal to <strong>MaxVal</strong>. Function in C++:
             </p>
 
             <pre class="brush: cpp">
@@ -344,7 +344,7 @@ void update(int idx , int val)
 }
             </pre>
 
-            <p>Let's show example for <b>idx</b> = 5:</p>
+            <p>Let's show example for <strong>idx</strong> = 5:</p>
 
             <div class="figure">
                 <table>
@@ -392,22 +392,22 @@ void update(int idx , int val)
                 <p>Image 1.6 - Updating tree (in brackets are tree frequencies before updating); arrows show path while we update tree from index to MaxVal (image shows example for index 5).</p>
             </div>
 
-            <p>Using algorithm from above or following arrows shown in Image 1.6 we can update <b>BIT</b>.</p>
+            <p>Using algorithm from above or following arrows shown in Image 1.6 we can update <strong>BIT</strong>.</p>
             <ul>
                 <li><strong>Time complexity:</strong> O(log MaxVal).</li>
                 <li><strong>Code length:</strong> Up to ten lines.</li>
             </ul>
 
             <h1><a name="reada">Read the actual frequency at a position</a></h1>
-            <p>We've described how we can read cumulative frequency for an index. It is obvious that we can not read just <b>tree[idx]</b> to get the actual frequency for value at index <b>idx</b>. One approach is to have one aditional array, in which we will seperately store frequencies for values. Both reading and storing take O(1); memory space is linear. Sometimes it is more important to save memory, so we will show how you can get actual frequency for some value without using aditional structures.</p>
+            <p>We've described how we can read cumulative frequency for an index. It is obvious that we can not read just <strong>tree[idx]</strong> to get the actual frequency for value at index <strong>idx</strong>. One approach is to have one aditional array, in which we will seperately store frequencies for values. Both reading and storing take O(1); memory space is linear. Sometimes it is more important to save memory, so we will show how you can get actual frequency for some value without using aditional structures.</p>
 
-            <p>Probably everyone can see that the actual frequency at a position <b>idx</b> can be calculated by calling function <b>read</b> twice -- <b>f[idx] = read(idx) - read(idx - 1)</b> -- just by taking the difference of two adjacent cumulative frequencies.  This procedure always works in 2 * O(log n) time. If we write a new function, we can get a bit faster algorithm, with smaller const.</p>
+            <p>Probably everyone can see that the actual frequency at a position <strong>idx</strong> can be calculated by calling function <strong>read</strong> twice -- <strong>f[idx] = read(idx) - read(idx - 1)</strong> -- just by taking the difference of two adjacent cumulative frequencies.  This procedure always works in 2 * O(log n) time. If we write a new function, we can get a bit faster algorithm, with smaller const.</p>
 
             <p>If two paths from two indexes to root have the same part of path, then we can calculate the sum until the paths meet, substract stored sums and we get a sum of frequencies between that two indexes. It is pretty simple to calculate sum of frequencies between adjacent indexes, or read the actual frequency at a given index.</p>
 
-            <p>Mark given index with <b>x</b>, its predecessor with <b>y</b>. We can represent (binary notation) <b>y</b> as <b>a0b</b>, where <b>b</b> consists of all ones. Then, <b>x</b> will be <b>a1b¯</b> (note that <b>b¯</b> consists all zeros).  Using our algorithm for getting <b>sum</b> of some index, let it be <b>x</b>, in first iteration we remove the last digit, so after the first iteration <b>x</b> will be <b>a0b¯</b>, mark a new value with <b>z</b>.</p>
+            <p>Mark given index with <strong>x</strong>, its predecessor with <strong>y</strong>. We can represent (binary notation) <strong>y</strong> as <strong>a0b</strong>, where <strong>b</strong> consists of all ones. Then, <strong>x</strong> will be <strong>a1b¯</strong> (note that <strong>b¯</strong> consists all zeros).  Using our algorithm for getting <strong>sum</strong> of some index, let it be <strong>x</strong>, in first iteration we remove the last digit, so after the first iteration <strong>x</strong> will be <strong>a0b¯</strong>, mark a new value with <strong>z</strong>.</p>
 
-            <p>Repeat the same process with <b>y</b>. Using our function for reading <b>sum</b> we will remove the last digits from the number (one by one). After several steps, our <b>y</b> will become (just to remind, it was <b>a0b</b>) <b>a0b¯</b>, which is the same as <b>z</b>. Now, we can write our algorithm. Note that the only exception is when <b>x</b> is equal to 0. Function in C++:</p>
+            <p>Repeat the same process with <strong>y</strong>. Using our function for reading <strong>sum</strong> we will remove the last digits from the number (one by one). After several steps, our <strong>y</strong> will become (just to remind, it was <strong>a0b</strong>) <strong>a0b¯</strong>, which is the same as <strong>z</strong>. Now, we can write our algorithm. Note that the only exception is when <strong>x</strong> is equal to 0. Function in C++:</p>
 
             <pre class="brush: cpp">
 int readSingle(int idx)
@@ -429,7 +429,7 @@ int readSingle(int idx)
 }
             </pre>
 
-            <p>Here's an example for getting the actual frequency for index 12:<br><br> First, we will calculate <b>z = 12 - (12 &amp; -12) = 8</b>, <b>sum = 11</b></p>
+            <p>Here's an example for getting the actual frequency for index 12:<br><br> First, we will calculate <strong>z = 12 - (12 &amp; -12) = 8</strong>, <strong>sum = 11</strong></p>
 
             <div class="figure">
                 <table>
@@ -469,7 +469,7 @@ int readSingle(int idx)
                 <p>Image 1.7 - read actual frequency at some index in BIT (image shows example for index 12).</p>
             </div>
                 
-            <p>Let's compare algorithm for reading actual frequency at some index when we twice use function <b>read</b> and the algorithm written above. Note that for each odd number, the algorithm will work in const time O(1), without any iteration. For almost every even number <b>idx</b>, it will work in c * O(log idx), where c is strictly less than 1, compare to <b>read(idx) - read(idx - 1),</b> which will work in c1 * O(log idx), where c1 is <b>always</b> greater than 1.</p>
+            <p>Let's compare algorithm for reading actual frequency at some index when we twice use function <strong>read</strong> and the algorithm written above. Note that for each odd number, the algorithm will work in const time O(1), without any iteration. For almost every even number <strong>idx</strong>, it will work in c * O(log idx), where c is strictly less than 1, compare to <strong>read(idx) - read(idx - 1),</strong> which will work in c1 * O(log idx), where c1 is <strong>always</strong> greater than 1.</p>
 
             <ul>
                 <li><strong>Time complexity:</strong> c * O(log MaxVal), where c is less than 1.</li>
@@ -477,7 +477,7 @@ int readSingle(int idx)
             </ul>
 
             <h1><a name="scaling">Scaling the entire tree by a constant factor</a></h1>
-            <p>Sometimes we want to scale our tree by some factor. With the procedures described above it is very simple.  If we want to scale by some factor <b>c</b>, then each index <b>idx</b> should be updated by <b>-(c - 1) * readSingle(idx) / c</b> (because <b>f[idx] - (c - 1) * f[idx] / c = f[idx] / c</b>). Simple function in C++:</p>
+            <p>Sometimes we want to scale our tree by some factor. With the procedures described above it is very simple.  If we want to scale by some factor <strong>c</strong>, then each index <strong>idx</strong> should be updated by <strong>-(c - 1) * readSingle(idx) / c</strong> (because <strong>f[idx] - (c - 1) * f[idx] / c = f[idx] / c</strong>). Simple function in C++:</p>
 
             <pre class="brush: cpp">
 void scale(int c)
@@ -572,7 +572,7 @@ int findG(int cumFre)
 
             </pre>
 
-            <p>Example for cumulative frequency 21 and function <b>find</b>:</p>
+            <p>Example for cumulative frequency 21 and function <strong>find</strong>:</p>
 
             <div class="figure">
                 <table>
@@ -616,7 +616,7 @@ int findG(int cumFre)
                 <li>count number of dots in rectangle (0 , 0), (x , y) - where (0 , 0) if down-left corner, (x , y) is up-right corner and sides are parallel to x-axis and y-axis.</li>
             </ol>
 
-            <p>If <b>m</b> is the number of queries, <b>max_x</b> is maximum x coordinate, and <b>max_y</b> is maximum y coordinate, then the problem should be solved in O(m * log (max_x) * log (max_y)). In this case, each element of the tree will contain array - (<b>tree[max_x][max_y]</b>). Updating indexes of x-coordinate is the same as before. For example, suppose we are setting/removing dot (<b>a</b> , <b>b</b>). We will call <b>update(a , b , 1)/update(a , b , -1)</b>, where <b>update</b> is:</p>
+            <p>If <strong>m</strong> is the number of queries, <strong>max_x</strong> is maximum x coordinate, and <strong>max_y</strong> is maximum y coordinate, then the problem should be solved in O(m * log (max_x) * log (max_y)). In this case, each element of the tree will contain array - (<strong>tree[max_x][max_y]</strong>). Updating indexes of x-coordinate is the same as before. For example, suppose we are setting/removing dot (<strong>a</strong> , <strong>b</strong>). We will call <strong>update(a , b , 1)/update(a , b , -1)</strong>, where <strong>update</strong> is:</p>
 
             <pre class="brush: cpp">
 void update(int x , int y , int val)
@@ -630,7 +630,7 @@ void update(int x , int y , int val)
             </pre>
 
 
-            <p>The function <b>updatey</b> is the "same" as function <b>update</b>:</p>
+            <p>The function <strong>updatey</strong> is the "same" as function <strong>update</strong>:</p>
 
             <pre class="brush: cpp">
 void updatey(int x , int y , int val)
@@ -676,16 +676,16 @@ void update(int x , int y , int val)
                 <li><a href="http://www.topcoder.com/stat?c=problem_statement&amp;pm=6551&amp;rd=9990">SRM 310 - FloatingMedian</a></li>
     
                 <li>Problem 2:</li>
-                    <b>Statement:</b><br>
-                    There is an array of <b>n</b> cards. Each card is putted face down on table. You have two queries:<br>
+                    <strong>Statement:</strong><br>
+                    There is an array of <strong>n</strong> cards. Each card is putted face down on table. You have two queries:<br>
                     &nbsp;&nbsp;1. T i j (turn cards from index i to index j, include i-th and j-th card - card which was
                     face down will be face up; card which was face up will be face down)<br>
                     &nbsp;&nbsp;2. Q i (answer 0 if i-th card is face down else answer 1)<br><br>
-                    <b>Solution:</b><br>
+                    <strong>Solution:</strong><br>
                     This has solution for each query (and 1 and 2) has time complexity O(log n). In array
-                    <b>f</b> (of length <b>n + 1</b>) we will store each query <b>T (i , j)</b> - we set <b>f[i]++</b> and 
-                    <b>f[j + 1]--</b>. For each card <b>k</b> between <b>i</b> and <b>j</b> (include <b>i</b> and <b>j</b>) sum
-                    <b>f[1] + f[2] + ... + f[k]</b> will be increased for 1, for all others will be same as before (look at the
+                    <strong>f</strong> (of length <strong>n + 1</strong>) we will store each query <strong>T (i , j)</strong> - we set <strong>f[i]++</strong> and 
+                    <strong>f[j + 1]--</strong>. For each card <strong>k</strong> between <strong>i</strong> and <strong>j</strong> (include <strong>i</strong> and <strong>j</strong>) sum
+                    <strong>f[1] + f[2] + ... + f[k]</strong> will be increased for 1, for all others will be same as before (look at the
                     image 2.0 for clarification), so our solution will be described sum (which is same as cumulative frequency) module 2.
 
                     <div class="figure">
