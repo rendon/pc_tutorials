@@ -79,8 +79,14 @@ header {
 }
 
 #article h1 {
-    font: 160% sans-serif;
-    margin-top: 30px;
+    font: 140% sans-serif;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#article h2 {
+    font: 115% sans-serif;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 
@@ -104,6 +110,7 @@ header {
 
 #article pre {
     border: 1px solid #aaaaaa;
+    padding: 5px;
 }
 
 #article .figure {
