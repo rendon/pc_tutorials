@@ -71,7 +71,7 @@ header {
 }
 
 #table-of-contents li {
-    margin: 5px;
+    margin-left: 15px;
 }
 
 #article {
@@ -148,3 +148,10 @@ header {
     text-align: center;
 }
 
+.sideNote {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #eeeeee;
+    border: 1px solid #999;
+}
