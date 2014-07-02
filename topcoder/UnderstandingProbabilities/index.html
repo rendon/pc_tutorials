@@ -47,9 +47,10 @@
         <!--region table of contents-->
         <div id="table-of-contents">
             <ol>
-                <li><a href="#point-one">Point one</a></li>
-                <li><a href="#point-two">Point two</a></li>
-                <li><a href="#point-three">Point three</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#step_by_step">Step by Step Probability Computation</a></li>
+                <li><a href="#randomizedalg">Randomized Algorithms</a></li>
+                <li><a href="#practice">Practice Problems</a></li>
             </ol>
         </div>
         <!--endregion-->
@@ -60,7 +61,7 @@
             <p>It has been said that life is a school of probability. A major effect of probability theory on everyday life is in risk assessment. Let's suppose you have an exam and you are not  so well prepared. There are 20 possible subjects, but you only had time to prepare for 15. If two subjects are given, what chances do you have to be familiar with both?  This is an example of a simple question inspired by the world in which we live today. Life is a very complex chain of <b>events</b> and almost everything can be imagined in terms of probabilities.</p>
             <p>Gambling has become part of our lives and it is an area in which probability theory is obviously involved. Although gambling had existed since time immemorial, it was not until the seventeenth century that the mathematical foundations finally became established. It all started with a simple question directed to Blaise Pascal by Chevalier de Méré, a nobleman that gambled frequently to increase his wealth. The question was whether a double six could be obtained on twenty-four rolls of two dice.</p>
             <p>As far as TopCoder problems are concerned, they're inspired by reality. You are presented with many situations, and you are explained the rules of many games.  While it's easy to recognize a problem that deals with probability computations, the solution may not be obvious at all. This is partly because probabilities are often overlooked for not being a common theme in programming challenges. But it is not true and TopCoder has plenty of them! Knowing how to approach such problems is a big advantage in TopCoder competitions and this article is to help you prepare for this topic.</p>
-            <p>Before applying the necessary algorithms to solve these problems, you first need some mathematical understanding. The next chapter presents the basic principles of probability. If you already have some experience in this area, you might want to skip this part and go to the following chapter: <a href="#stepbystep">Step by Step Probability Computation</a>. After that it follows a short discussion on <a href="#randomizedalg">Randomized Algorithms</a> and in the end there is a list with the available problems on TopCoder. This last part is probably the most important. Practice is the key!</p>
+            <p>Before applying the necessary algorithms to solve these problems, you first need some mathematical understanding. The next chapter presents the basic principles of probability. If you already have some experience in this area, you might want to skip this part and go to the following chapter: <a href="#step_by_step">Step by Step Probability Computation</a>. After that it follows a short discussion on <a href="#randomizedalg">Randomized Algorithms</a> and in the end there is a list with the available problems on TopCoder. This last part is probably the most important. Practice is the key!</p>
 
             <h1><a name="basics">Basics</a></h1>
             <p>Working with probabilities is much like conducting an experiment.  An <b>outcome</b> is the result of an experiment or other situation involving uncertainty. The set of all possible outcomes of a probability experiment is called a <b>sample space</b>. Each possible result of such a study is represented by one and only one point in the sample space, which is usually denoted by S.</p>
@@ -121,27 +122,27 @@
             </div>
 
             <p>The problem asks you to find a wager that maximizes the number of favorable outcomes. In order to compute the number of favorable outcomes for a certain wager, we need to determine how many points the three players end with for each of the 8 possible outcomes. The idea is illustrated in the following program:</p>
-            <pre class="brush: cpp">
+<pre class="brush: cpp">
 int wager (vector  scores, int wager1, int wager2)
 {
- int best, bet, odds, wage, I, J, K;
- best = 0; bet = 0;
+    int best, bet, odds, wage, I, J, K;
+    best = 0; bet = 0;
 
- for (wage = 0; wage ≤ scores[0]; wage++)
- {
-  odds = 0;
-  //  in 'odds' we keep the number of favorable outcomes
-  for (I = -1; I ≤ 1; I = I + 2)
-   for (J = -1; J ≤ 1; J = J + 2)
-    for (K = -1; K ≤ 1; K = K + 2)
-     if (scores[0] + I * wage > scores[1] + J * wager1  &&
-      scores[0] + I * wage > scores[2] + K * wager2)   { odds++; }
-  if (odds > best)  { bet = wage ; best = odds; }
-  //  a better wager has been found
- }
- return bet;
+    for (wage = 0; wage ≤ scores[0]; wage++)
+    {
+        odds = 0;
+        //  in 'odds' we keep the number of favorable outcomes
+        for (I = -1; I ≤ 1; I = I + 2)
+            for (J = -1; J ≤ 1; J = J + 2)
+                for (K = -1; K ≤ 1; K = K + 2)
+                    if (scores[0] + I * wage > scores[1] + J * wager1  &&
+                            scores[0] + I * wage > scores[2] + K * wager2)   { odds++; }
+        if (odds > best)  { bet = wage ; best = odds; }
+        //  a better wager has been found
+    }
+    return bet;
 }
-            </pre>
+</pre>
 
             <p>Another good problem to start with is <a href="http://community.topcoder.com/stat?c=problem_statement&pm=3994&rd=6532">PipeCuts</a> (SRM 233, Div 1 - Easy). This can be solved in a similar manner. There is a finite number of outcomes and all you need to do is to consider them one by one.</p>
             <p>Let's now consider a series of n independent events: E1, E2, ... , En. Two surprisingly common questions that may appear (and many of you have already encountered) are the following:</p>
@@ -169,34 +170,232 @@ int wager (vector  scores, int wager1, int wager2)
             <h2><a href="http://community.topcoder.com/stat?c=problem_statement&pm=1848&rd=4675">BirthdayOdds</a></h2>
             <p>A good example to illustrate the probability concepts discussed earlier is the classical "Birthday Paradox". It has been shown that if there are at least 23 people in a room, there is a more than 50% chance that at least two of them will share the same birthday. While this is not a paradox in the real sense of the word, it is a mathematical truth that contradicts common intuition. The TopCoder problem asks you to find the minimum number of people in order to be more than minOdds% sure that at least two of them have the same birthday. One of the first things to notice about this problem is that it is much easier to solve the complementary problem: "What is the probability that N randomly selected people have all different birthdays?". The strategy is to start with an empty room and put people in the room one by one, comparing their birthdays with those of them already in the room:</p>
 
-            <pre class="brush: cpp">
+<pre class="brush: cpp">
 int minPeople (int minOdds, int days)
 {
- int nr;
- double target, p;
+    int nr;
+    double target, p;
 
- target = 1 - (double) minOdds / 100;
- nr = 1;
- p = 1;
+    target = 1 - (double) minOdds / 100;
+    nr = 1;
+    p = 1;
 
- while (p &gt; target)
- {
-  p = p * ( (double) 1 - (double) nr / days);
-  nr ++;
- }
+    while (p &gt; target)
+    {
+        p = p * ( (double) 1 - (double) nr / days);
+        nr ++;
+    }
 
- return nr;
+    return nr;
 }
 </pre>
 
             <p>This so called "Birthday Paradox" has many real world applications and one of them is described in the TopCoder problem called <a href="http://community.topcoder.com/stat?c=problem_statement&pm=1771&rd=4570">Collision</a> (SRM 153, Div 1 - Medium). The algorithm is practically the same, but one has to be careful about the events that may alter the sample space.</p>
             <p>Sometimes a probability problem can be quite tricky. As we have seen before, the 'Birthday Paradox' tends to contradict our common sense. But the formulas prove to us that the answer is indeed correct. Formulas can help, but to become a master of probabilities you need one more ingredient: "number sense". This is partly innate ability and partly learned ability acquired through practice. Take this <a href="http://teacherlink.org/content/math/interactive/probability/interactivequiz/question1/home.html">quiz</a> to assess your number sense and to also become familiar with some of the common probability misconceptions.</p>
 
-            <h1><a name="point-two">Point two</a></h1>
-            Some text.
+            <h1><a name="step_by_step">Step by Step Probability Computation</a></h1>
+            <p>this chapter we will discuss some real TopCoder problems in which the occurrence of an event is influenced by occurrences of previous events. We can think of it as a graph in which the nodes are events and the edges are dependencies between them. This is a somewhat forced analogy, but the way we compute the probabilities for different events is similar to the way we traverse the nodes of a graph. We start from the root, which is the initial state and has a probability of 1. Then, as we consider different scenarios,  the probability is distributed accordingly.</p>
 
-            <h1><a name="point-three">Point three</a></h1>
-            Some text.
+            <h2><a href="http://community.topcoder.com/stat?c=problem_statement&pm=3510&rd=6527">NestedRandomness</a></h2>
+            <p>problem looked daunting to some people, but for those who figured it out, it was just a matter of a few lines. For the first step, it is clear what do we have to do: the function random(N) is called and it returns a random integer uniformly distributed in the range 0 to N-1. Thus, every integer in this interval has a probability of 1/N to occur. If we consider all these outcomes as input for the next step, we can determine all the outcomes of the random(random(N)) call. To understand this better, let's work out the case when N = 4.</p>
+
+
+            <table>
+               <tbody>
+               <tr>
+                  <td style="text-align:left;">
+                      <ul>
+                          <li>After the <strong>first nesting</strong> all integers have the same probability to occur, which is 1 / 4.</li>
+                          <li>For the <strong>second nesting</strong> there is a 1/4 chance for each of the following functions to be called: random(0), random(1), random(2) and random(3). Random(0) produces an error, random(1) returns 0, random (2) returns 0 or 1 (each with a probability of 1/2) and random(3) returns 0, 1 or 2.</li>
+                          <li>As a result, for the <strong>third nesting</strong>, random(0) has a probability of  1/4 + 1/8 + 1/12 of being called, random(1) has a probability of 1/8 + 1/12 of being called and random(2) has a probability of 1/12 of being called.</li>
+                          <li>Analogously, for the <strong>fourth nesting</strong>, the function random(0) has a probability of 1/4 of being called, while random(1) has a probability of 1/24.</li>
+                          <li>As for the <strong>fifth nesting</strong>, we can only call random(0), which produces an error. The whole process is described in the picture to the right.</li>
+                      </ul>
+                  </td>
+                  <td>
+                      <img src="pictures/05.png" alt="" border="0"><br>
+                      <strong>NestedRandomness for N = 4</strong>
+                  </td>
+                  </tr>
+                </tbody>
+            </table>
+
+            <p>The source code for this problem is given below:</p>
+
+<pre class="brush: cpp">
+double probability (int N, int nestings, int target)
+{
+    int I, J, K;
+    double A[1001], B[2001];
+    // A[I] represents the probability of number I  to appear
+
+    for (I = 0; I &lt; N ; I++)  A[I] = (double) 1 / N;
+    for (K = 2; K ≤ nestings; K++)
+    {
+        for (I = 0; I &lt; N; I++)  B[I] = 0;
+        // for each I between 0 and N-1 we call the function "random(I)"
+        // as described in the problem statement
+        for (I = 0; I &lt; N; I++)
+            for (J = 0; J &lt; I; J++)
+                B[J] +=  (double) A[I] / I;
+        for (I = 0; I &lt; N; I++)  A[I] = B[I];
+    }
+    return A[target];
+}
+</pre>
+
+            <p>you got the taste for this problem, here are another five you may want to try:</p>
+
+            <ul>
+                <li><a href="http://community.topcoder.com/stat?c=problem_statement&pm=3509&rd=6528">ChessKnight</a> - assign each square a probability and for every move check the squares one by one to compute the probabilities for the next move.</li>
+                <li><a href="http://community.topcoder.com/stat?c=problem_statement&pm=4450&rd=7217">DiceThrows</a> - determine the probability of each possible outcome for both players and then compare the results.</li>
+                <li><a href="http://community.topcoder.com/stat?c=problem_statement&pm=1954&rd=5006">RockSkipping</a> - the same approach, just make sure you got the lake pattern correctly.</li>
+                <li><a href="http://community.topcoder.com/stat?c=problem_statement&pm=1849&rd=4675">PointSystem</a> - represent the event space as a matrix of possible scores (x, y).</li>
+                <li><a href="http://community.topcoder.com/stat?c=problem_statement&pm=2959&rd=5880">VolleyBall</a> - similar to PointSystem, but the scores may go up pretty high.</li>
+            </ul>
+
+            <p>Let's now take a look at another TopCoder problem, <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2974&rd=5875">GeneticCrossover</a>, which deals with <b>conditional probability</b>. Here, you are asked to predict the quality of an animal, based on the genes it inherits from its parents. Considering the problem description, there are two situations that may occur: a gene does not depend on another gene, or a gene is dependent.</p>
+            <p>For the first case, consider p the probability that the gene is to be expressed dominantly. There are only 4 cases to consider:</p>
+            <ul>
+                <li>at least one parent has two dominant genes. (<b>p</b> = 1)</li>
+                <li>each parent has exactly one dominant gene. (<b>p</b> = 0.5)</li>
+                <li>one parent has one dominant gene and the other has only recessive genes (<b>p</b> = 0.25)</li>
+                <li>both parents have two recessive genes (<b>p</b> = 0)</li>
+            </ul>
+
+            <p>Now let's take the case when a gene is dependent on another. This make things a bit trickier as the "parent" gene may also depend on another and so on ... To determine the probability that a dependent gene is dominant, we take the events that each gene in the chain (starting with the current gene) is dominant. In order for the current gene to be expressed dominantly, we need all these events to occur. To do this, we take the product of probabilities for each individual event in the chain. The algorithm works recursively. Here is the complete source code for this problem:</p>
+
+
+<pre class="brush: cpp">
+int n, d[200];
+double power[200];
+
+// here we determine the characteristic for each gene (in power[I]
+// we keep the probability of gene I to be expressed dominantly)
+double detchr (string p1a, string p1b, string p2a, string p2b, int nr)
+{
+    double p, p1, p2;
+    p = p1 = p2 = 1.0;
+    if (p1a[nr] ≤ 'Z')  p1 = p1 - 0.5;
+    //  is a dominant gene
+    if (p1b[nr] ≤ 'Z')  p1 = p1 - 0.5;
+    if (p2a[nr] ≤ 'Z')  p2 = p2 - 0.5;
+    if (p2b[nr] ≤ 'Z')  p2 = p2 - 0.5;
+    p = 1 - p1 * p2;
+
+    if (d[nr] != 1) power[nr] = p * detchr (p1a, p1b, p2a, p2b, d[nr]);
+    // gene 'nr' is dependent on gene d[nr]
+    else power[nr] = p;
+    return power[nr];
+}
+
+double cross (string p1a, string p1b, string p2a, string p2b,
+        vector &lt;int&gt; dom, vector &lt;int&gt; rec, vector &lt;int&gt; dependencies)
+{
+    int I;
+    double fitness = 0.0;
+
+    n = rec.size();
+    for (I = 0; I &lt; n; i++) d[i] = dependencies[i];
+    for (I = 0 ;I &lt; n; I++) power[i] = -1.0;
+    for (I = 0; I &lt; n; i++)
+        if (power[I] == -1.0) detchr (p1a, p1b, p2a, p2b, i);
+    // we check if the dominant character of gene I has
+    // not already been computed
+    for (I = 0; I ≤ n; I++)
+        fitness=fitness+(double) power[i]*dom[i]-(double) (1-power[i])*rec[i];
+    // we compute the expected 'quality' of an animal based on the
+    // probabilities of each gene to be expressed dominantly
+
+    return fitness;
+}
+</pre>
+
+            <p>See also  <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2234&rd=4675">ProbabilityTree</a>.</p>
+
+            <h1><a name="randomizedalg">Randomized Algorithms</a></h1>
+
+            <p>We call randomized algorithms those algorithms that use random numbers to make decisions during their execution. Unlike deterministic algorithms that for a fixed input always give the same output and the same running-time, a randomized algorithm behaves differently from execution to execution. Basically, we distinguish two kind of randomized algorithms:</p>
+            <ol>
+                <li><a href="http://encyclopedia.laborlawtalk.com/Monte_Carlo_algorithm">Monte Carlo algorithms</a>: may sometimes produce an incorrect solution - we bound the probability of failure.</li>
+                <li><a href="http://encyclopedia.laborlawtalk.com/Las_Vegas_algorithm">Las Vegas algorithms</a>: always give the correct solution, the only variation is the running time - we study the distribution of the running time.</li>
+            </ol>
+
+            <p>Read these <a href="http://www.ews.uiuc.edu/~kumar/lectures/lecture.10.3.pdf">lecture notes</a> from the College of Engineering at UIUC for an example of how these algorithms work.</p>
+
+            <p>The main goal of randomized algorithms is to build faster, and perhaps simpler solutions. Being able to tackle "harder" problems is also a benefit of randomized algorithms. As a result, these algorithms have become a research topic of major interest and have already been utilized to more easily solve many different problems.</p>
+            <p>An interesting question is whether such an algorithm may become useful in TopCoder competitions. Some problems have many possible solutions, where a number of which are also optimal. The classical approach is to check them one by one, in an established order. But it cannot be guaranteed that the optima are uniformly distributed in the solution domain. Thus, a deterministic algorithm may not find you an optimum quickly enough. The advantage of a randomized algorithm is that there are actually no rules to set about the order in which the solutions are checked and for the cases when the optima are clustered together, it usually performs much better.  See <a href="http://community.topcoder.com/stat?c=problem_statement&pm=2935&rd=5854">QueenInterference</a> for a TopCoder example.</p>
+            <p>Randomized algorithms are particularly useful when faced with malicious attackers who deliberately try to feed a bad input to the algorithm. Such algorithms are widely used in <a href="http://en.wikipedia.org/wiki/Cryptography">cryptography</a>, but it sometimes makes sense to also use them in TopCoder competitions. It may happen that you have an efficient algorithm, but there are a few degenerate cases for which its running time is significantly slower. Assuming the algorithm is correct, it has to run fast enough for all inputs. Otherwise, all the points you earned for submitting that particular problem are lost.  This is why here, on TopCoder, we are interested in <b>worst case execution time</b>.</p>
+
+            <h2><a name="to_challenge_or_not_to_challenge">To challenge or not to challenge?</a></h2>
+            <p>Another fierce coding challenge is now over and you have 15 minutes to look for other coders' bugs. The random call in a competitor's submission is likely to draw your attention. This will most likely fall into one of two scenarios:</p>
+            <ol>
+                <li>the submission was just a desperate attempt and will most likely fail on many inputs.</li>
+                <li>the algorithm was tested rather thoroughly and the probability to fail (or time out) is virtually null.</li>
+            </ol>
+
+            <p>The first thing you have to do is to ensure it was not already unsuccessfully challenged (check the coder's history). If it wasn't, it may deserve a closer look. Otherwise, you should ensure that you understand what's going on before even considering a challenge. Also take into account other factors such as coder rating, coder submission accuracy, submission time, number of resubmissions or impact on your ranking.</p>
+
+            <h2><a name="will_random_really_work">Will "random" really work?</a></h2>
+            <p>In most optimizing problems, the ratio between the number of optimal solutions and the total number of solutions is not so obvious.  An easy, but not so clever solution, is to simply try generating different samples and see how the algorithm behaves. Running such a simulation is usually pretty quick and may also give you some extra clues in how to actually solve the problem.</p>
+
+<pre class="brush: cpp">
+Max = 1000000; attempt = 0;
+while (attempt &lt; Max)
+{
+    answer = solve_random (...);
+    if (better (answer, optimum))
+        // we found a better solution
+    {
+        optimum = answer;
+        cout &lt;&lt; "Solution " &lt;&lt; answer &lt;&lt; " found on step " &lt;&lt; attempt &lt;&lt; "\n";
+    }
+    attempt ++;
+}
+</pre>
+
+            <h1><a name="practice">Practice Problems</a></h1>
+            <h2><a name="level_1">Level 1</a></h2>
+            <ul>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3994&amp;rd=6532">PipeCuts</a> - SRM 233</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1848&amp;rd=4675">BirthdayOdds</a> - SRM 174</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1348&amp;rd=4580">BenfordsLaw</a> - SRM 155</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2989&amp;rd=5869">QuizShow</a> - SRM 223</li>
+            </ul>
+
+            <h2><a name="level_2">Level 2</a></h2>
+            <ul>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1771&amp;rd=4570">Collision</a> - SRM 153</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3509&amp;rd=6528">ChessKnight</a> - TCCC05 Round 1</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2436&amp;rd=5074">ChipRace</a> - SRM 199</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=4450&amp;rd=7217">DiceThrows</a> - SRM 242</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=4453&amp;rd=7218">TopFive</a> - SRM 243</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2234&amp;rd=4675">ProbabilityTree</a> - SRM 174</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3443&amp;rd=6515">OneArmedBandit</a> - SRM 226</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2233&amp;rd=4675">RangeGame</a> - SRM 174</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3439&amp;rd=5868">YahtzeeRoll</a> - SRM 222</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2299&amp;rd=4740">BagOfDevouring</a> - SRM 184</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2959&amp;rd=5880">VolleyBall</a> - TCO04 Round 3</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2287&amp;rd=4710">RandomFA</a> - SRM 178</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3481&amp;rd=6530">PackageShipping</a> - TCCC05 Round 3</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2935&amp;rd=5854">QueenInterference</a> - SRM 208</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1972&amp;rd=4711">BaseballLineup</a> - TCO '03 Finals</li>
+            </ul>
+
+            <h2><a name="level_3">Level 3</a></h2>
+            <ul>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=2974&amp;rd=5875">GeneticCrossover</a> - TCO04 Qual 3</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3510&amp;rd=6527">NestedRandomness</a> - TCCC05 Qual 5</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1954&amp;rd=5006">RockSkipping</a> - TCCC '04 Round 1</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1849&amp;rd=4675">PointSystem</a> - SRM 174</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=1358&amp;rd=4715">AntiMatter</a> - SRM 179</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3486&amp;rd=6515">TestScores</a> - SRM 226</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3068&amp;rd=6518">Hangman42</a> - SRM 229</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3440&amp;rd=5868">KingOfTheCourt</a> - SRM 222</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3069&amp;rd=5864">WinningProbability</a> - SRM 218</li>
+                <li><a href="http://topcoder.com/stat?c=problem_statement&amp;pm=3563&amp;rd=6550">Disaster</a> - TCCC05 Semi 1</li>
+            </ul>
+
         </div>
         <!--endregion-->
     </content>
