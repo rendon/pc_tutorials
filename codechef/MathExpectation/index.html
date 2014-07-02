@@ -59,7 +59,8 @@
         </ul>
 
         <p>The expected value x is the sum of the expected values of these two cases. Using the rule of linearity of the expectation and the definition of Expected value, we get</p>
-        <p>x = (1 / 2)(1) + (1 / 2) (1 + x)</p>
+
+        <div class="equation">x = (1 / 2)(1) + (1 / 2) (1 + x)</div>
 
         <p>Solving, we get x = 2.</p>
         <p>Thus the expected number of coin flips for getting a head is 2.</p>
@@ -71,12 +72,14 @@
             <li>a. If the first flip is a tails, then we have wasted one flip. The probability of this event is 1 / 2 and the total number of flips required is x + 1.</li>
             <li>b. If the first flip is a heads and second flip is a tails, then we have wasted two flips. The probability of this event is 1 / 4 and the total number of flips required is x + 2.</li>
             <li>c. If the first flip is a heads and second flip is also heads, then we are done. The probability of this event is 1 / 4 and the total number of flips required is 2.</li>
-    </ul>
+        </ul>
 
-    <p>Adding, the equation that we get is: <p>
+    <p>Adding, the equation that we get is:</p>
 
-    <p>x = (1 / 2)(x + 1) + (1 / 4)(x + 2) + (1 / 4)2</p>
+    <div class="equation">x = (1 / 2)(x + 1) + (1 / 4)(x + 2) + (1 / 4)2</div>
+
     <p>Solving, we get x = 6.</p>
+
     <p>Thus, the expected number of coin flips for getting two consecutive heads is 6.</p>
 
     <h3>Q3. (Generalization) What is the expected number of coin flips for getting N consecutive heads, given N?</h3>
@@ -99,11 +102,11 @@
     <p>The part of equation corrresponding to case (b) is (1/(2<sup>N</sup>))(N).</p>
 
     <p>Adding,</p>
-    <p>x = (1 / 2)(x + 1)  +  (1 / 4)(x + 2) + ... +  (1/(2^k))(x+k) + ... + (1/(2^N))(x+N) + (1/(2^N))(N)</p>
+    <div class="equation">x = (1 / 2)(x + 1)  +  (1 / 4)(x + 2) + ... +  (1/(2^k))(x+k) + ... + (1/(2^N))(x+N) + (1/(2^N))(N)</div>
 
-    <p>Solving this equation is left as an exercise to the reader.  The entire equation can be very easily reduced to the following form:</p>
+    <p>Solving this equation is left as an exercise to the reader. The entire equation can be very easily reduced to the following form:</p>
 
-    <p>x = 2<sup>N+1</sup>-2</p>
+    <div class="equation">x = 2<sup>N+1</sup>-2</div>
 
     <p>Thus, the expected number of coin flips for getting N consecutive heads is (2<sup>N+1</sup> - 2).</p>
 
