@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<!--region head-->
+<head>
+    <title>Range Minimum Query and Lowest Common Ancestor</title>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="../style.css">
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shBrushCpp.js" ></script>
+    <script type="text/javascript" src="../libs/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shCore.css" />
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shCoreDefault.css" />
+
+    <link rel="stylesheet" href="../libs/syntaxhighlighter/styles/shThemeDefault.css" />
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<!--endregion-->
+
+<body>
+    <header> <em>Algorithm Tutorials</em> <hr> </header>
+    <content>
+        <!--region tuturial header-->
+        <div id="tutorial-header">
+            <div id="tutorial-title">
+                <h1>Range Minimum Query and Lowest Common Ancestor</h1>
+            </div>
+            <div id="author-info">
+                <div id="author-row">
+                    <div id="author-photo">
+                        <!-- pictures/author.png contains the author photo. -->
+                        <img src="pictures/author.png" width="48" height="48" alt="alt_text" />
+                    </div>
+                    <div id="author-account-info">
+                        <!-- replace [code] with the author's id. -->
+                        <!-- replace [author_nick] accordingly. -->
+                        <a href="http://community.topcoder.com/tc?module=MemberProfile&cr=22065256" target="_blank">danielp</a><br>
+                        <em>TopCoder Member</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--endregion-->
+
+
+        <!--region table of contents-->
+        <div id="table-of-contents">
+            <ol>
+                <li><a href="#point-one">Point one</a></li>
+                <li><a href="#point-two">Point two</a></li>
+                <li><a href="#point-three">Point three</a></li>
+            </ol>
+        </div>
+        <!--endregion-->
+
+
+        <!--region article-->
+        <div id="article">
+            <h1><a name="introduction">Introduction</a></h1>
+            <p>The problem of finding the Lowest Common Ancestor (LCA) of a pair of nodes in a rooted tree has been studied more carefully in the second part of the 20th century and now is fairly basic in algorithmic graph theory. This problem is interesting not only for the tricky algorithms that can be used to solve it, but for its numerous applications in string processing and computational biology, for example, where LCA is used with suffix trees or other tree-like structures.<a href="http://siamdl.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=SMJCAT000013000002000338000001&idtype=cvips&gifs=Yes" target="_blank" refer="lowestCommonAncestor">Harel and Tarjan</a> were the first to study this problem more attentively and they showed that after linear preprocessing of the input tree LCA, queries can be answered in constant time. Their work has since been extended, and this tutorial will present many interesting approaches that can be used in other kinds of problems as well. </p>
+
+            <p>Let's consider a less abstract example of LCA: the tree of life. It's a well-known fact that the current habitants of Earth evolved from other species. This evolving structure can be represented as a tree, in which nodes represent species, and the sons of some node represent the directly evolved species. Now species with similar characteristics are divided into groups. By finding the LCA of some nodes in this tree we can actually find the common parent of two species, and we can determine that the similar characteristics they share are inherited from that parent. </p>
+
+            <p>Range Minimum Query (RMQ) is used on arrays to find the position of an element with the minimum value between two specified indices. We will see later that the LCA problem can be reduced to a restricted version of an RMQ problem, in which consecutive array elements differ by exactly 1. </p>
+
+            <p>However, RMQs are not only used with LCA. They have an important role in string preprocessing, where they are used with suffix arrays (a new data structure that supports string searches almost as fast as suffix trees, but uses less memory and less coding effort). </p>
+
+            <p>In this tutorial we will first talk about RMQ. We will present many approaches that solve the problem -- some slower but easier to code, and others faster. In the second part we will talk about the strong relation between LCA and RMQ. First we will review two easy approaches for LCA that don't use RMQ; then show that the RMQ and LCA problems are equivalent; and, at the end, we'll look at how the RMQ problem can be reduced to its restricted version, as well as show a fast algorithm for this particular case. </p>
+
+            <h1><a name="notations">Notations</a></h1>
+            <p>Suppose that an algorithm has preprocessing time <strong>f(n)</strong> and query time <strong>g(n)</strong>. The notation for the overall complexity for the algorithm is <strong>&lt;f(n), g(n)&gt;</strong>. </p>
+
+            <p>We will note the position of the element with the minimum value in some array <strong>A </strong>between indices<strong> i</strong> and <strong>j</strong> with <strong>RMQA(i, j)</strong>. </p>
+
+            <p>The furthest node from the root that is an ancestor of both <strong>u</strong> and <strong>v </strong>in some rooted  tree <strong>T</strong> is <strong>LCAT(u, v)</strong>. </p>
+
+            <h1><a name="range_minum_query_rmq">Range Minimum Query (RMQ)</a></h1>
+
+            <p>Given an array <strong>A[0, N-1]</strong> find the position of  the element with the minimum value between two given indices. </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_001.gif" alt="RMQ_001" />
+            </div>
+
+            <h1><a name="trivial_algorithms_for_rmq">Trivial algorithms for RMQ</a></h1>
+
+            <p>For every pair of indices <strong>(i, j) </strong>store the value of <strong>RMQA(i, j)</strong> in a table <strong>M[0, N-1][0, N-1]</strong>. Trivial computation will lead us to an <strong>&lt;O(N<sup>3</sup>), O(1)&gt;</strong> complexity. However, by using an easy dynamic programming approach we can reduce the complexity to <strong>&lt;O(N<sup>2</sup>), O(1)&gt;</strong>. The preprocessing function will look something like this:</p>
+
+            <pre class="brush: cpp">
+void process1(int M[MAXN][MAXN], int A[MAXN], int N)
+{
+    int i, j;
+    for (i =0; i &lt; N; i++)
+        M[i][i] = i;
+    for (i = 0; i &lt; N; i++)
+        for (j = i + 1; j &lt; N; j++)
+            if (A[M[i][j - 1]] &lt; A[j])
+                M[i][j] = M[i][j - 1];
+            else
+                M[i][j] = j;
+}
+            </pre>
+
+            <p>This trivial algorithm is quite slow and uses <strong>O(N<sup>2</sup>)</strong> memory, so it won't work for large cases. </p>
+
+            <h1><a name="an_o_of_sqrt_of_n_solution">An &lt;O(N), O(sqrt(N))&gt; solution</a></h1>
+            <p>An interesting idea is to split the vector in <strong>sqrt(N)</strong> pieces. We will keep in a vector <strong>M[0, sqrt(N)-1]</strong> the position for the minimum value for each section. <strong>M</strong> can be easily preprocessed in <strong>O(N)</strong>. Here is an example: </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_002.gif" alt="RMQ_002" />
+            </div>
+
+            <p>Now let's see how can we compute <strong>RMQA(i, j)</strong>. The idea is to get the overall minimum from the <strong>sqrt(N)</strong> sections that lie inside the interval, and from the end and the beginning of the first and the last sections that intersect the bounds of the interval. To get <strong>RMQA(2,7)</strong> in the above example we should compare <strong>A[2]</strong>, <strong>A[M[1]]</strong>, <strong>A[6]</strong> and <strong>A[7]</strong> and get the position of the minimum value. It's easy to see that this algorithm doesn't make more than <strong>3 * sqrt(N)</strong> operations per query. </p>
+
+            <p>The main advantages of this approach are that is to quick to code (a plus for topcoder-style competitions) and that you can adapt it to the dynamic version of the problem (where you can change the elements of the array between queries). </p>
+
+            <h1><a name="sparse_table_algorithm">Sparse Table (ST) algorithm</a></h1>
+            <p>A better approach is to preprocess <strong>RMQ</strong> for sub arrays of length <strong>2<sup>k</sup></strong>using dynamic programming. We will keep an array <strong>M[0, N-1][0, logN]</strong> where <strong>M[i][j]</strong> is the index of the minimum value in the sub array starting at <strong>i</strong> having length <strong>2<sup>j</sup></strong>. Here is an example: </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_003.gif" alt="RMQ_003" />
+            </div>
+
+            <p>For computing <strong>M[i][j]</strong> we must search for the minimum value in the first and second half of the interval. It's obvious that the small pieces have <strong>2<sup>j-1</sup></strong> length, so the recurrence is: </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_007.gif" alt="RMQ_007" />
+            </div>
+
+            <p>The preprocessing function will look something like this:</p>
+<pre class="brush: cpp">
+void process2(int M[MAXN][LOGMAXN], int A[MAXN], int N)
+{
+    int i, j;
+
+    //initialize M for the intervals with length 1
+    for (i = 0; i &lt; N; i++)
+        M[i][0] = i;
+    //compute values from smaller to bigger intervals
+    for (j = 1; 1 &lt;&lt; j &lt;= N; j++)
+        for (i = 0; i + (1 &lt;&lt; j) - 1 &lt; N; i++)
+            if (A[M[i][j - 1]] &lt; A[M[i + (1 &lt;&lt; (j - 1))][j - 1]])
+                M[i][j] = M[i][j - 1];
+            else
+                M[i][j] = M[i + (1 &lt;&lt; (j - 1))][j - 1];
+}
+</pre>
+
+            <p>Once we have these values preprocessed, let's show how we can use them to calculate <strong>RMQA(i, j)</strong>. The idea is to select two blocks that entirely cover the interval <strong>[i..j]</strong> and  find the minimum between them. Let <strong>k = [log(j - i + 1)]</strong>. For computing <strong>RMQA(i, j)</strong> we can use the following formula: </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_005.gif" alt="RMQ_005" />
+            </div>
+
+            <p>So, the overall complexity of the algorithm is <strong>&lt;O(N logN), O(1)&gt;</strong>. </p>
+
+            <h1><a name="segment_trees">Segment Trees</a></h1>
+            <p>For solving the RMQ problem we can also use segment trees. A segment tree is a heap-like data structure that can be used for making update/query operations upon array intervals in logarithmical time. We define the segment tree for the interval <strong>[i, j]</strong> in the following recursive manner:</p>
+
+            <ul>
+                <li>the first node will hold the information for the interval <strong>[i, j]</strong></li>
+                <li>if i&lt;j the left and right son will hold the information for the intervals <strong>[i, (i+j)/2]</strong> and <strong>[(i+j)/2+1, j]</strong>.</li>
+            </ul>
+
+            <p>Notice that the height of a segment tree for an interval with <strong>N</strong> elements is <strong>[logN] + 1</strong>. Here is how a segment tree for the interval <strong>[0, 9]</strong> would look like: </p>
+
+            <div class="figure">
+                <img src="pictures/RMQ_004.gif" alt="RMQ_004" />
+            </div>
+
+            <p>The segment tree has the same structure as a heap, so if we have a node numbered <strong>x </strong>that is not a leaf the left son of<strong> x</strong> is <strong>2*x</strong> and the right son <strong>2*x+1</strong>. </p>
+
+            <p>For solving the RMQ problem using segment trees we should use an array <strong>M[1, 2 * 2<sup>[logN] + 1]</sup></strong> where <strong>M[i]</strong> holds the minimum value position in the interval assigned to node <strong>i</strong>. At the beginning all elements in <strong>M</strong> should be <strong>-1</strong>. The tree should be initialized with the following function (<strong>b </strong>and <strong>e </strong>are the bounds of the current interval): </p>
+
+<pre class="brush: cpp">
+void initialize(int node, int b, int e, int M[MAXIND], int A[MAXN], int N)
+{
+    if (b == e)
+        M[node] = b;
+    else
+    {
+        //compute the values in the left and right subtrees
+        initialize(2 * node, b, (b + e) / 2, M, A, N);
+        initialize(2 * node + 1, (b + e) / 2 + 1, e, M, A, N);
+        //search for the minimum value in the first and 
+        //second half of the interval
+        if (A[M[2 * node]] &lt;= A[M[2 * node + 1]])
+            M[node] = M[2 * node];
+        else
+            M[node] = M[2 * node + 1]; 
+    }
+} 
+</pre>
+
+            
+            <p>The function above reflects the way the tree is constructed. When calculating the minimum position for some interval we should look at the values of the sons. You should call the function with <strong>node = 1</strong>, <strong>b = 0</strong> and <strong>e  = N-1</strong>. </p>
+
+            <p>We can now start making queries. If we want to find the position of the minimum value in some interval <strong>[i, j]</strong> we should use the next easy function:</p>
+
+<pre class="brush: cpp">
+int query(int node, int b, int e, int M[MAXIND], int A[MAXN], int i, int j)
+{
+    int p1, p2;
+
+
+    //if the current interval doesn't intersect 
+    //the query interval return -1
+    if (i &gt; e || j &lt; b)
+        return -1;
+
+    //if the current interval is included in 
+    //the query interval return M[node]
+    if (b &gt;= i &amp;&amp; e &lt;= j)
+        return M[node];
+
+    //compute the minimum position in the 
+    //left and right part of the interval
+    p1 = query(2 * node, b, (b + e) / 2, M, A, i, j);
+    p2 = query(2 * node + 1, (b + e) / 2 + 1, e, M, A, i, j);
+
+    //return the position where the overall 
+    //minimum is
+    if (p1 == -1)
+        return M[node] = p2;
+    if (p2 == -1)
+        return M[node] = p1;
+    if (A[p1] &lt;= A[p2])
+        return M[node] = p1;
+    return M[node] = p2;
+}
+</pre>
+            <p>You should call this function with <strong>node = 1</strong>, <strong>b = 0</strong> and <strong>e = N - 1</strong>, because the interval assigned to the first node is <strong>[0, N-1]</strong>. </p>
+
+            <p>It's easy to see that any query is done in <strong>O(log N)</strong>. Notice that we stop when we reach completely in/out intervals, so our path in the tree should split only one time. </p>
+
+            <p>Using segment trees we get an <strong>&lt;O(N), O(logN)&gt;</strong> algorithm. Segment trees are very powerful, not only because they can be used for RMQ. They are a very flexible data structure, can solve even the dynamic version of RMQ problem, and have numerous applications in range searching problems. </p>
+        </div>
+        <!--endregion-->
+    </content>
+    <footer>
+    </footer>
+</body>
+</html>
